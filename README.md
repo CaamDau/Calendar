@@ -1,11 +1,8 @@
 # Calendar 日历组件
 
-## Installation
-
-CaamDau is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
 ```ruby
+pod 'CaamDauCalendar'
+
 pod 'CaamDau/Calendar'
 ```
 <p>
