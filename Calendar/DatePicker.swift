@@ -9,7 +9,7 @@
 
 import UIKit
 
-extension CD_DatePicker {
+extension DatePicker {
     public enum Style {
         case yyyy
         case MM
@@ -18,7 +18,7 @@ extension CD_DatePicker {
         case yyyyMMdd
     }
 }
-open class CD_DatePicker:UIView {
+open class DatePicker:UIView {
     convenience public init() {
         self.init(frame:.zero)
     }
@@ -31,8 +31,8 @@ open class CD_DatePicker:UIView {
         makeUI()
     }
     
-    lazy var picker: CD_Picker = {
-        let vv = CD_Picker(frame: self.bounds)
+    lazy var picker: Picker = {
+        let vv = Picker(frame: self.bounds)
         return vv
     }()
     
@@ -80,47 +80,47 @@ open class CD_DatePicker:UIView {
             self.date = max
             return
         }
-        let now = Date().cd_component(.year)
-        let years = ((minDate?.cd_component(.year) ?? (now-100))...(maxDate?.cd_component(.year) ?? (now+100))).map{ $0.stringValue }
+        let now = Date().cd.component(.year)
+        let years = ((minDate?.cd.component(.year) ?? (now-100))...(maxDate?.cd.component(.year) ?? (now+100))).map{ $0.stringValue }
         switch style {
         case .yyyy:
-            picker.rows = [years.compactMap{ CD_Picker.Model(title: $0, isEnabled: true) }]
-            picker.select([0:date.cd_component(.year).stringValue], animated: animated)
+            picker.rows = [years.compactMap{ Picker.Model(title: $0, isEnabled: true) }]
+            picker.select([0:date.cd.component(.year).stringValue], animated: animated)
         case .MM:
-            let y = date.cd_component(.year).stringValue
+            let y = date.cd.component(.year).stringValue
             picker.rows = [getMonths(y, firstYear: y, lastYear: y)]
-            picker.select([0:date.cd_component(.month).stringValue], animated: animated)
+            picker.select([0:date.cd.component(.month).stringValue], animated: animated)
         case .MMdd:
-            let y = date.cd_component(.year).stringValue
+            let y = date.cd.component(.year).stringValue
             let m = getMonths(y, firstYear: y, lastYear: y)
-            let d = getDays(y, firstYear: y, lastYear: y, month: date.cd_component(.month).stringValue)
+            let d = getDays(y, firstYear: y, lastYear: y, month: date.cd.component(.month).stringValue)
             picker.rows = [m, d]
-            picker.select([0:date.cd_component(.month).stringValue,
-                           1:date.cd_component(.day).stringValue], animated: animated)
+            picker.select([0:date.cd.component(.month).stringValue,
+                           1:date.cd.component(.day).stringValue], animated: animated)
             
         case .yyyyMM:
-            let y = years.compactMap{ CD_Picker.Model(title: $0, isEnabled: true) }
-            let m = getMonths(date.cd_component(.year).stringValue, firstYear: years.first!, lastYear: years.last!)
+            let y = years.compactMap{ Picker.Model(title: $0, isEnabled: true) }
+            let m = getMonths(date.cd.component(.year).stringValue, firstYear: years.first!, lastYear: years.last!)
             picker.rows = [y, m]
-            var mm = date.cd_component(.month).stringValue
+            var mm = date.cd.component(.month).stringValue
             let mmm = (m.first{$0.isEnabled}?.title.intValue ?? 1)
             mm = mmm > mm.intValue ? mmm.stringValue : mm
-            picker.select([0:date.cd_component(.year).stringValue,
+            picker.select([0:date.cd.component(.year).stringValue,
                            1: mm], animated: animated)
         case .yyyyMMdd:
-            let y = years.compactMap{ CD_Picker.Model(title: $0, isEnabled: true) }
-            let m = getMonths(date.cd_component(.year).stringValue, firstYear: years.first!, lastYear: years.last!)
-            let d = getDays(date.cd_component(.year).stringValue, firstYear: years.first!, lastYear: years.last!, month: date.cd_component(.month).stringValue)
+            let y = years.compactMap{ Picker.Model(title: $0, isEnabled: true) }
+            let m = getMonths(date.cd.component(.year).stringValue, firstYear: years.first!, lastYear: years.last!)
+            let d = getDays(date.cd.component(.year).stringValue, firstYear: years.first!, lastYear: years.last!, month: date.cd.component(.month).stringValue)
             picker.rows = [y, m, d]
             
-            var mm = date.cd_component(.month).stringValue
+            var mm = date.cd.component(.month).stringValue
             let mmm = (m.first{$0.isEnabled}?.title.intValue ?? 1)
             mm = mmm > mm.intValue ? mmm.stringValue : mm
             
-            var dd = date.cd_component(.day).stringValue
+            var dd = date.cd.component(.day).stringValue
             let ddd = (d.first{$0.isEnabled}?.title.intValue ?? 1)
             dd = ddd > dd.intValue ? ddd.stringValue : dd
-            picker.select([0:date.cd_component(.year).stringValue, 1:mm, 2:dd], animated: animated)
+            picker.select([0:date.cd.component(.year).stringValue, 1:mm, 2:dd], animated: animated)
         }
         picker.callback = { [weak self](component, row, res) in
             self?.makeCompletionHandler(component, row, res)
@@ -156,7 +156,7 @@ open class CD_DatePicker:UIView {
                 }
             }
             do{
-                let y = date.cd_component(.year).stringValue
+                let y = date.cd.component(.year).stringValue
                 let days = getDays(res[0]!, firstYear: y, lastYear: y, month: res[0]!)
                 picker.rows[1] = days
                 
@@ -176,7 +176,7 @@ open class CD_DatePicker:UIView {
         case .yyyyMM:// where component == 0
             format = "yyyy-MM"
             picker.rows[1] = getMonths(res[0]!, firstYear: picker.rows[0].first!.title, lastYear: picker.rows[0].last!.title)
-            guard let date = (res[0]! + "-" + res[1]!).cd_date(format) else {
+            guard let date = (res[0]! + "-" + res[1]!).cd.date(format) else {
                 break
             }
             if let min = minDate, date < min, let m = (picker.rows[1].first{ $0.isEnabled }) {
@@ -191,7 +191,7 @@ open class CD_DatePicker:UIView {
             format = "yyyy-MM-dd"
             do{
                 picker.rows[1] = getMonths(res[0]!, firstYear: picker.rows[0].first!.title, lastYear: picker.rows[0].last!.title)
-                guard let date = (res[0]! + "-" + res[1]! + "-" + res[2]!).cd_date(format) else {
+                guard let date = (res[0]! + "-" + res[1]! + "-" + res[2]!).cd.date(format) else {
                     break
                 }
                 if let min = minDate, date < min, let m = (picker.rows[1].first{ $0.isEnabled }) {
@@ -212,7 +212,7 @@ open class CD_DatePicker:UIView {
                     picker.select(res, animated: true)
                 }
                 
-                guard let date = (res[0]! + "-" + res[1]! + "-" + res[2]!).cd_date(format) else {
+                guard let date = (res[0]! + "-" + res[1]! + "-" + res[2]!).cd.date(format) else {
                     break
                 }
                 if let min = minDate, date < min, let d = (picker.rows[2].first{ $0.isEnabled }) {
@@ -227,46 +227,46 @@ open class CD_DatePicker:UIView {
         }
         let keys = res.keys.sorted()
         let values = keys.compactMap{res[$0]}.joined(separator: "-")
-        callback?(values.cd_date(format)!)
+        callback?(values.cd.date(format)!)
     }
 }
 
 
-extension CD_DatePicker {
-    fileprivate func getMonths(_ year:String, firstYear:String, lastYear:String) -> [CD_Picker.Model] {
+extension DatePicker {
+    fileprivate func getMonths(_ year:String, firstYear:String, lastYear:String) -> [Picker.Model] {
         let months = (1...12).map{$0}
-        let models = months.compactMap({ (m) -> CD_Picker.Model? in
+        let models = months.compactMap({ (m) -> Picker.Model? in
             var e = true
             if year == firstYear {
-                e = m >= (minDate?.cd_component(.month) ?? 1)
+                e = m >= (minDate?.cd.component(.month) ?? 1)
             }
             if year == lastYear {
-                e = m <= (maxDate?.cd_component(.month) ?? 12)
+                e = m <= (maxDate?.cd.component(.month) ?? 12)
             }
             if firstYear == lastYear {
-                e = m >= (minDate?.cd_component(.month) ?? 1) && m <= (maxDate?.cd_component(.month) ?? 12)
+                e = m >= (minDate?.cd.component(.month) ?? 1) && m <= (maxDate?.cd.component(.month) ?? 12)
             }
-            let mm = CD_Picker.Model(title: m.stringValue, isEnabled: e)
+            let mm = Picker.Model(title: m.stringValue, isEnabled: e)
             return mm
         })
         return models
     }
     
-    fileprivate func getDays(_ year:String, firstYear:String, lastYear:String, month:String) -> [CD_Picker.Model] {
-        let date = (year + "-" + month).cd_date("yyyy-MM")
-        let days = (1...date!.cd_count(of: .day, in: .month)!).map{ $0 }
-        let models = days.compactMap { (d) -> CD_Picker.Model? in
+    fileprivate func getDays(_ year:String, firstYear:String, lastYear:String, month:String) -> [Picker.Model] {
+        let date = (year + "-" + month).cd.date("yyyy-MM")
+        let days = (1...date!.cd.count(of: .day, in: .month)!).map{ $0 }
+        let models = days.compactMap { (d) -> Picker.Model? in
             var e = true
-            if year == firstYear && month.intValue == (minDate?.cd_component(.month) ?? 1)
-                || firstYear == lastYear && month.intValue == (minDate?.cd_component(.month) ?? 1)  {
-                e = d >= (minDate?.cd_component(.day) ?? 1)
+            if year == firstYear && month.intValue == (minDate?.cd.component(.month) ?? 1)
+                || firstYear == lastYear && month.intValue == (minDate?.cd.component(.month) ?? 1)  {
+                e = d >= (minDate?.cd.component(.day) ?? 1)
             }
-            if year == lastYear && month.intValue == (maxDate?.cd_component(.month) ?? 12) ||
-                firstYear == lastYear && month.intValue == (maxDate?.cd_component(.month) ?? 12) {
-                e = d <= (maxDate?.cd_component(.day) ?? 31)
+            if year == lastYear && month.intValue == (maxDate?.cd.component(.month) ?? 12) ||
+                firstYear == lastYear && month.intValue == (maxDate?.cd.component(.month) ?? 12) {
+                e = d <= (maxDate?.cd.component(.day) ?? 31)
             }
             
-            let mm = CD_Picker.Model(title: d.stringValue, isEnabled: e)
+            let mm = Picker.Model(title: d.stringValue, isEnabled: e)
             return mm
         }
         return models

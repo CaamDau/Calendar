@@ -9,9 +9,9 @@
 
 import UIKit
 import CaamDauExtension
-extension CD_DatePickerAlert {
-    public class func show(_ style:CD_DatePicker.Style = .yyyyMMdd, date:Date = Date(), preferredStyle:CD_DatePickerAlert.Style = .sheet, callback:((Date)->Void)? = nil, then:((CD_DatePickerAlert)->Void)? = nil) {
-        let vc = CD_DatePickerAlert()
+extension DatePickerAlert {
+    public class func show(_ style:DatePicker.Style = .yyyyMMdd, date:Date = Date(), preferredStyle:DatePickerAlert.Style = .sheet, callback:((Date)->Void)? = nil, then:((DatePickerAlert)->Void)? = nil) {
+        let vc = DatePickerAlert()
         vc.style = style
         vc.preferredStyle = preferredStyle
         vc.date = date
@@ -23,14 +23,14 @@ extension CD_DatePickerAlert {
     }
 }
 
-public class CD_DatePickerAlert: UIViewController {
+public class DatePickerAlert: UIViewController {
     public enum Style {
         case alert
         case sheet
     }
     var preferredStyle:Style = .sheet
     var callback:((Date)->Void)?
-    var style:CD_DatePicker.Style = .yyyyMMdd
+    var style:DatePicker.Style = .yyyyMMdd
     var date:Date = Date()
     public var minDate: Date?
     public var maxDate: Date?
@@ -96,7 +96,7 @@ public class CD_DatePickerAlert: UIViewController {
             }
             .build
         
-        let picker = CD_DatePicker().cd
+        let picker = DatePicker().cd
             .add(toSuperstack: stack)
             .build
         picker.callback = { [weak self]date in
@@ -130,7 +130,7 @@ public class CD_DatePickerAlert: UIViewController {
                     .add(toSuperstack: $0)
                     .build
                 
-                btn1.addTarget(self, action: #selector(CD_DatePickerAlert.buttonClick(_:)), for: UIControl.Event.touchUpInside)
+                btn1.addTarget(self, action: #selector(DatePickerAlert.buttonClick(_:)), for: UIControl.Event.touchUpInside)
                 
                 UIView().cd
                     .background(colorLine)
@@ -152,7 +152,7 @@ public class CD_DatePickerAlert: UIViewController {
                 }
                 .build
                 
-                btn2.addTarget(self, action: #selector(CD_DatePickerAlert.buttonClick(_:)), for: UIControl.Event.touchUpInside)
+                btn2.addTarget(self, action: #selector(DatePickerAlert.buttonClick(_:)), for: UIControl.Event.touchUpInside)
         }
     }
     
@@ -204,7 +204,7 @@ public class CD_DatePickerAlert: UIViewController {
                     .add(toSuperstack: $0)
                     .build
                 
-                btn1.addTarget(self, action: #selector(CD_DatePickerAlert.buttonClick(_:)), for: .touchUpInside)
+                btn1.addTarget(self, action: #selector(DatePickerAlert.buttonClick(_:)), for: .touchUpInside)
                 
                 UIStackView().cd.axis(.horizontal).add(toSuperstack: $0)
                 
@@ -216,7 +216,7 @@ public class CD_DatePickerAlert: UIViewController {
                     .text(action.1)
                     .add(toSuperstack: $0)
                     .build
-                btn2.addTarget(self, action: #selector(CD_DatePickerAlert.buttonClick(_:)), for: .touchUpInside)
+                btn2.addTarget(self, action: #selector(DatePickerAlert.buttonClick(_:)), for: .touchUpInside)
                 
                 UIStackView().cd
                     .axis(.horizontal)
@@ -236,7 +236,7 @@ public class CD_DatePickerAlert: UIViewController {
                 $0.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         }
         
-        let picker = CD_DatePicker().cd
+        let picker = DatePicker().cd
             .add(toSuperstack: stack)
             .build
         picker.callback = { [weak self]date in

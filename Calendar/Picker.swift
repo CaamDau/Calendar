@@ -9,7 +9,7 @@
 
 import UIKit
 
-open class CD_Picker: UIView {
+open class Picker: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,7 +49,7 @@ open class CD_Picker: UIView {
         picker.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
 }
-extension CD_Picker: UIPickerViewDelegate, UIPickerViewDataSource {
+extension Picker: UIPickerViewDelegate, UIPickerViewDataSource {
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return rows.count
     }
@@ -73,7 +73,7 @@ extension CD_Picker: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-extension CD_Picker {
+extension Picker {
     public struct Model {
         public var title = ""
         public var isEnabled = true

@@ -15,7 +15,7 @@ pod 'CaamDau/Calendar'
 ## Usage
 #### 日期选择器
 ```ruby
-                CD_DatePickerAlert.show(.yyyyMMdd, date: Date(), preferredStyle: .sheet, callback: { (da) in
+                DatePickerAlert.show(.yyyyMMdd, date: Date(), preferredStyle: .sheet, callback: { (da) in
                     print_cd(da)
                 }) {
                     $0.colorLine = Config.color.line_1
